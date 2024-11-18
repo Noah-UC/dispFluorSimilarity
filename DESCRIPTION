@@ -2,9 +2,13 @@ Package: FlowCytoHelp
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Uddeep", "Chaudhury", , "https://github.com/Noah-UC", role = c("aut", "cre"),
+           )
+Description: This package is meant to help select antibody conjugations for flow cytometry.
+	     Fluorochromes often have overlapping visible spectra and this causes issues using them together in flow cytometry.
+	     Cytek Biosciences (that makes flow cytometers) has data on how much two fluorochromes overlap (similarity index).
+ 	     Cytek used to offer this freely on spectrum.cytekbio.com, but has now locked this information behind a login. 
+	     This function takes a list of character strings that contains the names of the fluorochromes that the user is trying to evaluate, and prints a heatmap of their similarity 	     index.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
