@@ -1,26 +1,36 @@
-
+#' Displays a heatmap of similarity indices for fluorochromes in the panel
+#'
+#' @param panel list of fluors as characters strings
+#' @import dplyr
+#' @import ggplot2
+#' @export
 dispFluorSimilarity <- function(panel) {
 
-  #installing required packages
+  #code to make sure at least two character strings are passed in a list
 
-  usethis::use_package("ggplot2")
-  usethis::use_package("dplyr")
+    if (length(panel) < 2) {
+    stop("Panel should have at least two Fluors.")
+  }
 
-  #loading database
+  if (all(panel %in% rownames(cytek_data))==FALSE) {
+    stop("Fluor not in database. Check spellings on spectrum.cytekbio.com.")
+  }
 
-  cytek_data = read.csv("../spectra-11_17_2024, 4_44_54 PM.csv", sep = "," , header = T,  row.names = 1, check.names = FALSE, )
-
+  #pick out similarity indices from database
 
   similarity_df =
     cytek_data %>%
     filter(
       row.names(
         cytek_data) %in% panel) %>%
-    select(panel)
+    select(all_of(panel))
 
-  similarity_matrix = as.matrix(
+  similarity_matrix = as.matrix(                #making it into a matrix
       similarity_df
   )
+
+
+  #Making a symmetrical Matrix
 
   similarity_matrix[upper.tri(similarity_matrix)] =
     t(
@@ -28,13 +38,15 @@ dispFluorSimilarity <- function(panel) {
 
   storage.mode(similarity_matrix) <- "numeric"
 
-
+  #Converting to tidy_long for ggplot2
 
   similarity_long = as.data.frame(
     as.table(
       similarity_matrix
       )
     )
+
+  #generating the plot
 
   p <- ggplot(data = similarity_long,
               aes(x = Var1, y = Var2, fill = Freq)) +
